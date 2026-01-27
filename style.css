@@ -1,41 +1,68 @@
 body{
 margin:0;
 font-family:Arial;
-display:flex;
 background:#f1f5f9;
 }
 
-/* Sidebar */
-.sidebar{
-width:180px;
+/* HEADER */
+.header{
+height:50px;
 background:#1e293b;
 color:white;
-padding:12px;
-height:100vh;
+display:flex;
+align-items:center;
+padding:0 10px;
+gap:10px;
 }
 
-.sidebar h2{
+.header h2{
 font-size:18px;
+margin:0;
+flex:1;
 text-align:center;
 }
 
-.sidebar button{
+/* MENU BUTTON */
+.menu-btn{
+background:none;
+border:none;
+color:white;
+font-size:22px;
+cursor:pointer;
+}
+
+/* SIDE MENU */
+.side-menu{
+position:fixed;
+top:50px;
+left:-200px;
+width:200px;
+height:100%;
+background:#0f172a;
+padding:10px;
+transition:0.3s;
+z-index:1000;
+}
+
+.side-menu.open{
+left:0;
+}
+
+.side-menu button{
 width:100%;
-padding:8px;
-margin:4px 0;
+padding:10px;
+margin:5px 0;
 border:none;
 background:#2563eb;
 color:white;
 border-radius:5px;
-cursor:pointer;
 font-size:14px;
+cursor:pointer;
 }
 
-/* Main */
+/* MAIN */
 .main{
-flex:1;
 padding:10px;
-overflow:auto;
 }
 
 /* Pages */
@@ -56,7 +83,7 @@ color:red;
 font-weight:bold;
 }
 
-/* Inputs & Buttons */
+/* Inputs */
 input,select{
 width:100%;
 padding:7px;
@@ -66,6 +93,7 @@ border-radius:5px;
 font-size:14px;
 }
 
+/* Buttons */
 button{
 padding:6px;
 border:none;
@@ -97,7 +125,7 @@ margin:80px auto;
 border-radius:8px;
 }
 
-/* Dashboard Grid */
+/* DASHBOARD */
 #dashList{
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
@@ -138,19 +166,4 @@ margin-top:8px;
 
 .dash-btns button{
 flex:1;
-padding:6px;
-font-size:13px;
-}
-
-/* Mobile */
-@media(max-width:600px){
-
-.sidebar{
-width:130px;
-}
-
-.card{
-font-size:13px;
-}
-
 }
