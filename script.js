@@ -2,6 +2,20 @@
 let selectedCustomer = null;
 let actionType = ""; // bill or pay
 
+/* MENU */
+
+function toggleMenu(){
+
+let menu=document.getElementById("sideMenu");
+
+menu.classList.toggle("open");
+}
+
+function goPage(id){
+
+toggleMenu();
+show(id);
+}
 
 /* PAGE SWITCH */
 function show(id){
@@ -14,6 +28,7 @@ document.getElementById(id)
 
 renderAll();
 }
+
 
 
 /* HELPERS */
