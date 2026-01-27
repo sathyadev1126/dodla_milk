@@ -1,0 +1,156 @@
+body{
+margin:0;
+font-family:Arial;
+display:flex;
+background:#f1f5f9;
+}
+
+/* Sidebar */
+.sidebar{
+width:180px;
+background:#1e293b;
+color:white;
+padding:12px;
+height:100vh;
+}
+
+.sidebar h2{
+font-size:18px;
+text-align:center;
+}
+
+.sidebar button{
+width:100%;
+padding:8px;
+margin:4px 0;
+border:none;
+background:#2563eb;
+color:white;
+border-radius:5px;
+cursor:pointer;
+font-size:14px;
+}
+
+/* Main */
+.main{
+flex:1;
+padding:10px;
+overflow:auto;
+}
+
+/* Pages */
+.page{display:none;}
+.active{display:block;}
+
+/* Cards */
+.card{
+background:white;
+padding:10px;
+border-radius:6px;
+margin-bottom:8px;
+font-size:14px;
+}
+
+.red{
+color:red;
+font-weight:bold;
+}
+
+/* Inputs & Buttons */
+input,select{
+width:100%;
+padding:7px;
+margin:4px 0;
+border:1px solid #ccc;
+border-radius:5px;
+font-size:14px;
+}
+
+button{
+padding:6px;
+border:none;
+background:#2563eb;
+color:white;
+border-radius:5px;
+cursor:pointer;
+font-size:13px;
+margin:2px 0;
+}
+
+/* Modal */
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:rgba(0,0,0,0.5);
+}
+
+.modalBox{
+background:white;
+padding:15px;
+width:90%;
+max-width:320px;
+margin:80px auto;
+border-radius:8px;
+}
+
+/* Dashboard Grid */
+#dashList{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+gap:10px;
+}
+
+.dash-card{
+background:white;
+padding:12px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,0.08);
+font-size:14px;
+}
+
+.dash-header{
+font-weight:bold;
+font-size:15px;
+margin-bottom:3px;
+}
+
+.dash-mobile{
+color:#555;
+font-size:13px;
+margin-bottom:6px;
+}
+
+.dash-row{
+display:flex;
+justify-content:space-between;
+margin:3px 0;
+}
+
+.dash-btns{
+display:flex;
+gap:8px;
+margin-top:8px;
+}
+
+.dash-btns button{
+flex:1;
+padding:6px;
+font-size:13px;
+}
+
+/* Mobile */
+@media(max-width:600px){
+
+.sidebar{
+width:130px;
+}
+
+.card{
+font-size:13px;
+}
+
+}

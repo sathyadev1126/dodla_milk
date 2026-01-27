@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Ledger Pro</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+
+<div class="sidebar">
+<h2>Ledger Pro</h2>
+
+<button onclick="show('dashboard')">Dashboard</button>
+<button onclick="show('customers')">Customers</button>
+<button onclick="show('history')">History</button>
+</div>
+
+
+<div class="main">
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="page active">
+<h3>Dashboard</h3>
+<div id="dashList"></div>
+</div>
+
+
+<!-- CUSTOMERS -->
+<div id="customers" class="page">
+
+<h3>Customers</h3>
+
+<div class="card">
+<input id="cName" placeholder="Customer Name">
+<input id="cMobile" placeholder="Mobile Number">
+<button onclick="addCustomer()">Add Customer</button>
+</div>
+
+<div id="custList"></div>
+</div>
+
+
+<!-- HISTORY -->
+<div id="history" class="page">
+
+<h3>History</h3>
+
+<div class="card">
+<select id="hisSelect"></select>
+
+<button onclick="exportHistoryPDF()">
+Export PDF
+</button>
+</div>
+
+<div id="hisList"></div>
+</div>
+
+
+<!-- PAYMENT MODAL -->
+<div id="payBox" class="modal">
+
+<div class="modalBox">
+
+<h3 id="payTitle"></h3>
+
+<input type="date" id="payDate">
+
+<input id="todayBill" type="number" placeholder="Bill Amount">
+
+<input id="paidAmt" type="number" placeholder="Paid Amount">
+
+<button onclick="saveAction()">Save</button>
+<button onclick="closePay()">Cancel</button>
+
+</div>
+</div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
