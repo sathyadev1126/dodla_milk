@@ -1,23 +1,23 @@
 
-let selectedCustomer = null;
-let actionType = ""; // bill or pay
+let selectedCustomer=null;
+let actionType="";
+
 
 /* MENU */
 
 function toggleMenu(){
-
-let menu=document.getElementById("sideMenu");
-
-menu.classList.toggle("open");
+document.getElementById("sideMenu")
+.classList.toggle("open");
 }
 
 function goPage(id){
-
 toggleMenu();
 show(id);
 }
 
+
 /* PAGE SWITCH */
+
 function show(id){
 
 document.querySelectorAll('.page')
@@ -30,8 +30,8 @@ renderAll();
 }
 
 
-
 /* HELPERS */
+
 function today(){
 return new Date().toISOString().split("T")[0];
 }
@@ -42,6 +42,7 @@ return new Date().toLocaleString();
 
 
 /* STORAGE */
+
 function getCustomers(){
 return JSON.parse(localStorage.getItem("customers")||"[]");
 }
@@ -60,6 +61,7 @@ localStorage.setItem("bills",JSON.stringify(data));
 
 
 /* ADD CUSTOMER */
+
 function addCustomer(){
 
 let name=cName.value.trim();
@@ -90,6 +92,7 @@ alert("Customer Added");
 
 
 /* DASHBOARD */
+
 function renderDashboard(){
 
 let cust=getCustomers();
@@ -179,6 +182,7 @@ due>0
 
 
 /* PAYMENT */
+
 function openBill(id){
 
 actionType="bill";
@@ -219,6 +223,7 @@ payBox.style.display="none";
 
 
 /* SAVE */
+
 function saveAction(){
 
 let date=payDate.value;
@@ -233,19 +238,20 @@ return;
 
 let arr=getBills();
 
-let found=arr.find(b=>
-b.cid===selectedCustomer &&
-b.dateOnly===date
-);
 
+/* ADD BILL */
 
-/* ADD BILL (merge same day) */
 if(actionType==="bill"){
 
 if(bill<=0){
 alert("Enter bill");
 return;
 }
+
+let found=arr.find(b=>
+b.cid===selectedCustomer &&
+b.dateOnly===date
+);
 
 if(found){
 found.bill+=bill;
@@ -263,7 +269,8 @@ dateTime:nowDateTime()
 }
 
 
-/* PAY (always new row) */
+/* PAY = ALWAYS NEW ROW */
+
 if(actionType==="pay"){
 
 if(paid<=0){
@@ -280,6 +287,7 @@ dateTime:nowDateTime()
 });
 }
 
+
 saveBills(arr);
 
 todayBill.value="";
@@ -294,6 +302,7 @@ alert("Saved");
 
 
 /* CUSTOMERS */
+
 function renderCustomers(){
 
 let arr=getCustomers();
@@ -347,6 +356,7 @@ renderAll();
 
 
 /* HISTORY */
+
 function renderHistory(){
 
 let cust=getCustomers();
@@ -373,65 +383,62 @@ hisSelect.onchange=showHistory;
 
 function showHistory(){
 
-  let id = Number(hisSelect.value);
+let id=Number(hisSelect.value);
 
-  let bills = getBills()
-    .filter(b => b.cid === id)
-    .sort((a,b)=> new Date(a.dateTime) - new Date(b.dateTime));
+let bills=getBills()
+.filter(b=>b.cid===id)
+.sort((a,b)=>new Date(a.dateTime)-new Date(b.dateTime));
 
-  hisList.innerHTML = "";
+hisList.innerHTML="";
 
-  if(bills.length === 0){
-    hisList.innerHTML = "<p>No History</p>";
-    return;
-  }
+if(bills.length===0){
+hisList.innerHTML="<p>No History</p>";
+return;
+}
 
-  let balance = 0;
+let balance=0;
+let rows=[];
 
-  // First calculate balances
-  let rows = [];
+bills.forEach(b=>{
 
-  bills.forEach(b => {
+let bill=Number(b.bill)||0;
+let paid=Number(b.paid)||0;
 
-    let bill = Number(b.bill)||0;
-    let paid = Number(b.paid)||0;
+balance=balance+bill-paid;
 
-    balance = balance + bill - paid;
+rows.push({
+date:b.dateTime||b.dateOnly,
+bill:bill,
+paid:paid,
+bal:balance
+});
+});
 
-    rows.push({
-      date: b.dateTime || b.dateOnly || "N/A",
-      bill: bill,
-      paid: paid,
-      balance: balance
-    });
 
-  });
+rows.reverse().forEach(r=>{
 
-  // Show newest first
-  rows.reverse().forEach(r => {
+hisList.innerHTML+=`
 
-    hisList.innerHTML += `
+<div class="card">
 
-      <div class="card">
+<b>Date:</b> ${r.date}<br>
 
-        <b>Date:</b> ${r.date}<br>
+Bill: ₹${r.bill}<br>
+Paid: ₹${r.paid}<br>
 
-        Bill: ₹${r.bill}<br>
-        Paid: ₹${r.paid}<br>
+<span class="${r.bal>0?'red':''}">
+Balance Due: ₹${r.bal}
+</span>
 
-        <span class="${r.balance>0?'red':''}">
-          Balance Due: ₹${r.balance}
-        </span>
-
-      </div>
-
-    `;
-  });
+</div>
+`;
+});
 
 }
 
 
 /* EXPORT PDF */
+
 function exportHistoryPDF(){
 
 let id=Number(hisSelect.value);
@@ -463,7 +470,11 @@ doc.text("Customer: "+cust.name,10,20);
 
 y=30;
 
-bills.forEach(b=>{
+let balance=0;
+
+bills
+.sort((a,b)=>new Date(a.dateTime)-new Date(b.dateTime))
+.forEach(b=>{
 
 if(y>260){
 doc.addPage();
@@ -472,8 +483,10 @@ y=20;
 
 let bill=Number(b.bill)||0;
 let paid=Number(b.paid)||0;
-let due=bill-paid;
-let dt=b.dateTime||b.dateOnly||"N/A";
+
+balance=balance+bill-paid;
+
+let dt=b.dateTime||b.dateOnly;
 
 doc.setFontSize(11);
 
@@ -482,7 +495,7 @@ y+=6;
 
 doc.text(`Bill: ₹${bill}`,10,y);
 doc.text(`Paid: ₹${paid}`,70,y);
-doc.text(`Due: ₹${due}`,130,y);
+doc.text(`Balance: ₹${balance}`,130,y);
 
 y+=10;
 
@@ -492,13 +505,48 @@ doc.save(cust.name+"_history.pdf");
 }
 
 
-/* RENDER */
+/* SUMMARY BAR */
+
+function renderSummary(){
+
+let bills=getBills();
+
+let totalBill=0;
+let totalPaid=0;
+
+bills.forEach(b=>{
+totalBill+=Number(b.bill)||0;
+totalPaid+=Number(b.paid)||0;
+});
+
+let due=totalBill-totalPaid;
+
+let bar=document.getElementById("summaryBar");
+
+if(!bar) return;
+
+if(due>0){
+bar.innerHTML=`Total Due: ₹${due} 🔴`;
+bar.classList.remove("green");
+}
+else{
+bar.innerHTML=`Total Due: ₹0 ✅`;
+bar.classList.add("green");
+}
+}
+
+
+/* RENDER ALL */
+
 function renderAll(){
 
 renderDashboard();
 renderCustomers();
 renderHistory();
+renderSummary();
 }
 
+
 /* LOAD */
+
 renderAll();
