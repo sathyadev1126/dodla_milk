@@ -12,21 +12,37 @@
 
 <body>
 
-<div class="sidebar">
+<!-- HEADER -->
+<div class="header">
+
+<button class="menu-btn" onclick="toggleMenu()">
+☰
+</button>
+
 <h2>Ledger Pro</h2>
 
-<button onclick="show('dashboard')">Dashboard</button>
-<button onclick="show('customers')">Customers</button>
-<button onclick="show('history')">History</button>
 </div>
 
 
+<!-- SIDE MENU -->
+<div id="sideMenu" class="side-menu">
+
+<button onclick="goPage('dashboard')">Dashboard</button>
+<button onclick="goPage('customers')">Customers</button>
+<button onclick="goPage('history')">History</button>
+
+</div>
+
+
+<!-- MAIN -->
 <div class="main">
 
 <!-- DASHBOARD -->
 <div id="dashboard" class="page active">
+
 <h3>Dashboard</h3>
 <div id="dashList"></div>
+
 </div>
 
 
@@ -36,12 +52,16 @@
 <h3>Customers</h3>
 
 <div class="card">
+
 <input id="cName" placeholder="Customer Name">
 <input id="cMobile" placeholder="Mobile Number">
+
 <button onclick="addCustomer()">Add Customer</button>
+
 </div>
 
 <div id="custList"></div>
+
 </div>
 
 
@@ -51,14 +71,17 @@
 <h3>History</h3>
 
 <div class="card">
+
 <select id="hisSelect"></select>
 
 <button onclick="exportHistoryPDF()">
 Export PDF
 </button>
+
 </div>
 
 <div id="hisList"></div>
+
 </div>
 
 
@@ -79,9 +102,12 @@ Export PDF
 <button onclick="closePay()">Cancel</button>
 
 </div>
-</div>
 
 </div>
+
+
+</div>
+
 
 <script src="script.js"></script>
 </body>
