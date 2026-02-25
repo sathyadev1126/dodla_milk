@@ -1,119 +1,148 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>DODLA MILK</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<link rel="stylesheet" href="style.css">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodla Milk | Smart Dues</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
 
-<!-- HEADER -->
-<div class="header">
+    <div class="app-container">
+        <aside class="sidebar glass-panel">
+            <div class="sidebar-header">
+                <div class="logo-icon"><i class='bx bxs-droplet'></i></div>
+                <h2>Dodla<span>Milk</span></h2>
+            </div>
+            <nav class="nav-links">
+                <div class="nav-item active" data-target="dashboard-view">
+                    <i class='bx bxs-dashboard'></i><span>Dashboard</span>
+                </div>
+                <div class="nav-item" data-target="transactions-view">
+                    <i class='bx bx-transfer-alt'></i><span>History</span>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="btn btn-outline w-100" id="btn-export">
+                    <i class='bx bx-download'></i> Export Data
+                </button>
+            </div>
+        </aside>
 
-<button class="menu-btn" onclick="toggleMenu()">☰</button>
+        <main class="main-content">
+            <header class="top-header glass-panel">
+                <div class="header-left">
+                    <h1 id="page-title">Dashboard</h1>
+                    <p id="current-date-display"></p>
+                </div>
+                <div class="header-right">
+                    <div class="search-box">
+                        <i class='bx bx-search'></i>
+                        <input type="text" id="customer-search" placeholder="Find customer...">
+                    </div>
+                    <button class="btn btn-primary" id="btn-add-customer-main">
+                        <i class='bx bx-user-plus'></i> New Customer
+                    </button>
+                </div>
+            </header>
 
-<h2>DODLA MILK</h2>
+            <div class="views-container">
+                <section id="dashboard-view" class="view-section active">
+                    <div class="summary-cards">
+                        <div class="glass-card card">
+                            <div class="card-icon blue"><i class='bx bx-wallet'></i></div>
+                            <div class="card-info"><h3>Total Dues</h3><h2 id="dash-total-dues">₹0.00</h2></div>
+                        </div>
+                        <div class="glass-card card">
+                            <div class="card-icon purple"><i class='bx bx-group'></i></div>
+                            <div class="card-info"><h3>Customers</h3><h2 id="dash-active-customers">0</h2></div>
+                        </div>
+                    </div>
 
-</div>
+                    <div class="glass-card mt-4">
+                        <div class="table-title">
+                            <h3>Manage Customers</h3>
+                        </div>
+                        <div class="responsive-table">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Customer</th>
+                                        <th>Current Balance</th>
+                                        <th class="text-right">Quick Actions</th>
+                                        <th style="width: 50px;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dash-customers-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
 
+                <section id="transactions-view" class="view-section hidden">
+                    <div class="glass-card">
+                        <h3>Full History</h3>
+                        <div class="responsive-table">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Customer</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transactions-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
 
-<!-- SIDE MENU -->
-<div id="sideMenu" class="side-menu">
+    <div class="modal-overlay hidden" id="modal-overlay"></div>
 
-<button onclick="goPage('dashboard')">Dashboard</button>
-<button onclick="goPage('customers')">Customers</button>
-<button onclick="goPage('history')">History</button>
+    <div class="glass-modal hidden" id="modal-customer">
+        <div class="modal-header"><h3 id="modal-cust-title">Add Customer</h3><button class="btn-close">×</button></div>
+        <form id="form-customer" class="modal-body">
+            <input type="hidden" id="edit-cust-id">
+            <div class="form-group"><label>Name</label><input type="text" id="cust-name" class="glass-input" required></div>
+            <div class="form-group"><label>Phone</label><input type="tel" id="cust-phone" class="glass-input"></div>
+            <div id="balance-input-group" class="form-group">
+                <label>Opening Due (₹)</label>
+                <input type="number" id="cust-balance" class="glass-input" value="0">
+            </div>
+            <div class="modal-footer"><button type="submit" class="btn btn-primary w-100">Save Customer</button></div>
+        </form>
+    </div>
 
-</div>
+    <div class="glass-modal hidden" id="modal-entry">
+        <div class="modal-header"><h3><span id="entry-action-type">Add</span> Entry</h3><button class="btn-close">×</button></div>
+        <form id="form-entry" class="modal-body">
+            <input type="hidden" id="tx-type">
+            <input type="hidden" id="tx-cust-id">
+            <div class="form-group">
+                <label>Customer</label>
+                <input type="text" id="tx-cust-name" class="glass-input" readonly>
+            </div>
+            <div class="form-group">
+                <label>Amount (₹)</label>
+                <input type="number" id="tx-amount" class="glass-input total-highlight" required autofocus>
+            </div>
+            <div class="form-group">
+                <label>Date</label>
+                <input type="date" id="tx-date" class="glass-input">
+            </div>
+            <div class="modal-footer"><button type="submit" class="btn btn-primary w-100" id="btn-entry-submit">Save</button></div>
+        </form>
+    </div>
 
-
-<!-- MAIN -->
-<div class="main">
-
-<!-- SUMMARY -->
-<div id="summaryBar" class="summary-bar">
-Total Due: ₹0
-</div>
-
-
-<!-- DASHBOARD -->
-<div id="dashboard" class="page active">
-
-<h3>Dashboard</h3>
-
-<div id="dashList"></div>
-
-</div>
-
-
-<!-- CUSTOMERS -->
-<div id="customers" class="page">
-
-<h3>Customers</h3>
-
-<div class="card">
-
-<input id="cName" placeholder="Customer Name">
-<input id="cMobile" placeholder="Mobile Number">
-
-<button onclick="addCustomer()">Add Customer</button>
-
-</div>
-
-<div id="custList"></div>
-
-</div>
-
-
-<!-- HISTORY -->
-<div id="history" class="page">
-
-<h3>History</h3>
-
-<div class="card">
-
-<select id="hisSelect"></select>
-
-<button onclick="exportHistoryPDF()">
-Export PDF
-</button>
-
-</div>
-
-<div id="hisList"></div>
-
-</div>
-
-
-<!-- PAYMENT MODAL -->
-<div id="payBox" class="modal">
-
-<div class="modalBox">
-
-<h3 id="payTitle"></h3>
-
-<input type="date" id="payDate">
-
-<input id="todayBill" type="number" placeholder="Bill Amount">
-
-<input id="paidAmt" type="number" placeholder="Paid Amount">
-
-<button onclick="saveAction()">Save</button>
-<button onclick="closePay()">Cancel</button>
-
-</div>
-
-</div>
-
-
-</div>
-
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
